@@ -43,7 +43,11 @@ public class DocumentUtils {
 			field.setAccessible(true);
 			String dataName = field.getAnnotation(FlixField.class).isObjectId() ? "_id" : field.getAnnotation(FlixField.class).fieldName();
 			try {
-				document.put(dataName, field.get(obj));
+				if (field.getType().isEnum() || (field.get(obj) instanceof Enum<?>)) {
+					document.put(dataName, ((Enum<?>) field.get(obj)).name());
+				} else {
+					document.put(dataName, field.get(obj));
+				}
 			} catch (IllegalArgumentException | IllegalAccessException e) {
 				Logger.getLogger("MongoFlix").severe(e.getMessage());
 			}
@@ -75,7 +79,11 @@ public class DocumentUtils {
 			field.setAccessible(true);
 			String dataName = field.getAnnotation(FlixField.class).isObjectId() ? "_id" : field.getAnnotation(FlixField.class).fieldName();
 			try {
-				field.set(obj, doc.getOrDefault(dataName, null));
+				if (field.getType().isEnum()) {
+					field.set(obj, Enum.valueOf((Class<? extends Enum>)field.getType(), doc.getString(dataName)));
+				} else {
+					field.set(obj, doc.getOrDefault(dataName, null));
+				}
 			} catch (IllegalArgumentException | IllegalAccessException e) {
 				Logger.getLogger("MongoFlix").severe(e.getMessage());
 			}

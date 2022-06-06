@@ -29,6 +29,10 @@ public class MongoFlixCollection {
 		return this.collection.countDocuments();
 	}
 	
+	public long count(Bson filter) {
+		return this.collection.countDocuments(filter);
+	}
+	
 	public Document first() {
 		return this.collection.find().first();
 	}
@@ -74,6 +78,10 @@ public class MongoFlixCollection {
 	
 	public void updateMany(Bson filter, List<? extends Bson> update) {
 		this.collection.updateMany(filter, update);
+	}
+	
+	public void replaceOne(Bson filter, Document replace) {
+		this.collection.replaceOne(filter, replace);
 	}
 	
 	public void deleteOne(Bson filter) {

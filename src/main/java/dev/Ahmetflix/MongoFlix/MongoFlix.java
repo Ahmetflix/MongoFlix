@@ -20,6 +20,14 @@ public class MongoFlix {
 		this.database = mongoClient.getDatabase(database);
 	}
 	
+	public MongoClient getMongoClient() {
+		return mongoClient;
+	}
+	
+	public MongoDatabase getDatabase() {
+		return database;
+	}
+	
 	public MongoCollection<Document> getCollection(String collectionName) {
 		return database.getCollection(collectionName);
 	}
